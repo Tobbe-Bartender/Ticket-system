@@ -1,0 +1,29 @@
+<%- include("./../partials/header.ejs") %>
+
+<h1>Admin - Manage Issue Categories</h1>
+
+<form action="/admin/addissuecategory" method="POST" style="margin-top: 20px;">
+    <label for="issue_category">New Issue Category:</label>
+    <input type="text" id="issue_category" name="issue_category" required style="width: 100%;">
+
+    <input type="submit" value="Add Issue Category" style="margin-top: 10px;">
+</form>
+
+<h2>Current Issue Categories</h2>
+<ul class="admin">
+    <% issue_category.forEach(category => { %>
+        <li>
+            <span class="category-name"><%= category.name %></span>
+            <form action="/admin/deletecategory" method="POST" class="delete-form">
+                <input type="hidden" name="category_id" value="<%= category.id %>">
+                <button type="submit" class="delete-button">Delete</button>
+            </form>
+        </li>
+    <% }) %>
+</ul>
+
+<div class="back-link">
+    <a href="/tickets">Back to Tickets</a>
+</div>
+
+<%- include("./../partials/footer.ejs") %>

@@ -1,0 +1,7 @@
+{
+    "host":     "EriksShitShow.local",
+    "user":     "dbadm",
+    "password": "P@ssw0rd",
+    "database": "ticketsystem",
+    "multipleStatements": true
+}

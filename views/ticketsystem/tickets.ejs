@@ -1,0 +1,118 @@
+<%- include("./../partials/header.ejs") %>
+
+<table>
+    <thead>
+        <tr>
+            <th class="<%= sort === 'ticket_id' ? 'active' : '' %>">
+                <a href="?sort=ticket_id&order=<%= sort === 'ticket_id' && order === 'ASC' ? 'desc' : 'asc' %>">
+                    ID
+                    <% if (sort === 'ticket_id') { %>
+                        <i class="fas fa-arrow-<%= order === 'ASC' ? 'up' : 'down' %>"></i>
+                    <% } %>
+                </a>
+            </th>
+            <th class="<%= sort === 'person' ? 'active' : '' %>">
+                <a href="?sort=person&order=<%= sort === 'person' && order === 'ASC' ? 'desc' : 'asc' %>">
+                    Name
+                    <% if (sort === 'person') { %>
+                        <i class="fas fa-arrow-<%= order === 'ASC' ? 'up' : 'down' %>"></i>
+                    <% } %>
+                </a>
+            </th>
+            <th class="<%= sort === 'user_email' ? 'active' : '' %>">
+                <a href="?sort=user_email&order=<%= sort === 'user_email' && order === 'ASC' ? 'desc' : 'asc' %>">
+                    Creators email
+                    <% if (sort === 'user_email') { %>
+                        <i class="fas fa-arrow-<%= order === 'ASC' ? 'up' : 'down' %>"></i>
+                    <% } %>
+                </a>
+            </th>
+            <th class="<%= sort === 'issue_choice' ? 'active' : '' %>">
+                <a href="?sort=issue_choice&order=<%= sort === 'issue_choice' && order === 'ASC' ? 'desc' : 'asc' %>">
+                    Issue
+                    <% if (sort === 'issue_choice') { %>
+                        <i class="fas fa-arrow-<%= order === 'ASC' ? 'up' : 'down' %>"></i>
+                    <% } %>
+                </a>
+            </th>
+            <th class="<%= sort === 'agent' ? 'active' : '' %>">
+                <a href="?sort=agent&order=<%= sort === 'agent' && order === 'ASC' ? 'desc' : 'asc' %>">
+                    Agent
+                    <% if (sort === 'agent') { %>
+                        <i class="fas fa-arrow-<%= order === 'ASC' ? 'up' : 'down' %>"></i>
+                    <% } %>
+                </a>
+            </th>
+            <th class="<%= sort === 'status' ? 'active' : '' %>">
+                <a href="?sort=status&order=<%= sort === 'status' && order === 'ASC' ? 'desc' : 'asc' %>">
+                    Status
+                    <% if (sort === 'status') { %>
+                        <i class="fas fa-arrow-<%= order === 'ASC' ? 'up' : 'down' %>"></i>
+                    <% } %>
+                </a>
+            </th>
+            <th class="<%= sort === 'time_created' ? 'active' : '' %>">
+                <a href="?sort=time_created&order=<%= sort === 'time_created' && order === 'ASC' ? 'desc' : 'asc' %>">
+                    Created
+                    <% if (sort === 'time_created') { %>
+                        <i class="fas fa-arrow-<%= order === 'ASC' ? 'up' : 'down' %>"></i>
+                    <% } %>
+                </a>
+            </th>
+            <th class="<%= sort === 'time_last_update' ? 'active' : '' %>">
+                <a href="?sort=time_last_update&order=<%= sort === 'time_last_update' && order === 'ASC' ? 'desc' : 'asc' %>">
+                    Last Updated
+                    <% if (sort === 'time_last_update') { %>
+                        <i class="fas fa-arrow-<%= order === 'ASC' ? 'up' : 'down' %>"></i>
+                    <% } %>
+                </a>
+            </th>
+            <th>Change</th>
+            <th>Inspect</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% for (const tickets of allTickets) { %>
+            <tr>
+                <td><%= tickets.ticket_id %></td>
+                <td><%= tickets.person %></td>
+                <td><%= tickets.user_email %></td>
+                <td><%= tickets.issue_choice %></td>
+                <td><%= tickets.agent %></td>
+
+                <td>
+                    <% if (oidc.user['http://localhost:1337/roles'].includes('Agent')) { %>
+                        <form action="/changeStatus" method="POST" style="display:inline;">
+                            <input type="hidden" name="ticket_id" value="<%= tickets.ticket_id %>">
+                            <select name="t_status" style="width: 140px" onchange="this.form.submit()">
+                                <option value="Created" <%= tickets.status === 'Created' ? 'selected' : '' %>>Created</option>
+                                <option value="In Progress" <%= tickets.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+                                <option value="Resolved" <%= tickets.status === 'Resolved' ? 'selected' : '' %>>Resolved</option>
+                                <option value="Closed" <%= tickets.status === 'Closed' ? 'selected' : '' %>>Closed</option>
+                            </select>
+                        </form>
+                    <% } else { %>
+                        <%= tickets.status %>
+                    <% } %>
+                </td>
+
+                <td>
+                    <%= new Date(tickets.time_created).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) %>
+                    <%= new Date(tickets.time_created).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) %>
+                </td>
+                <td>
+                    <%= new Date(tickets.time_last_update).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) %>
+                    <%= new Date(tickets.time_last_update).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) %>
+                </td>
+                <td>
+                    <a href="/changeticket/<%= tickets.ticket_id %>">Change</a>
+                </td>
+                <td>
+                    <a href="/inspect/<%= tickets.ticket_id %>">Inspect</a>
+                </td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<%- include("./../partials/footer.ejs") %>

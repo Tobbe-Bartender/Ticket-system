@@ -1,0 +1,35 @@
+<%- include("./../partials/header.ejs") %>
+
+<form action="/createticket" method="POST" enctype="multipart/form-data">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="t_person" required>
+
+    <label for="issue_choice">Issue</label>
+    <select name="t_issue_choice" id="issue_choice" required>
+        <option value="Hardware">Hardware</option>
+        <option value="Software">Software</option>
+        <option value="Connection">Connection</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label for="issue_explain">Explain the Issue (Max 1000 characters)</label>
+    <textarea id="issue_explain" name="t_issue_explain" rows="10" maxlength="1000" required></textarea>
+    <p id="charCount">1000 characters remaining</p>
+
+    <label for="file">Attach a file or image (optional, max 5MB):</label>
+    <input type="file" id="file" name="ticket_file">
+
+    <input type="submit" value="Create Ticket">
+</form>
+
+<script>
+    const issueExplain = document.getElementById('issue_explain');
+    const charCount = document.getElementById('charCount');
+
+    issueExplain.addEventListener('input', function () {
+        const remaining = 1000 - issueExplain.value.length;
+        charCount.textContent = `${remaining} characters remaining`;
+    });
+</script>
+
+<%- include("./../partials/footer.ejs") %>

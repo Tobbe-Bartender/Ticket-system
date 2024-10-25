@@ -1,0 +1,92 @@
+<%- include("./../partials/header.ejs") %>
+
+<h1>Inspect Ticket</h1>
+
+<div class="ticket-container" style="display: flex; gap: 20px;">
+
+    <div class="ticket-details" style="flex: 1;">
+        <div class="ticket-detail-item">
+            <label for="ticket_id">Ticket ID:</label>
+            <p id="ticket_id"><%= ticket.ticket_id %></p>
+        </div>
+
+        <div class="ticket-detail-item">
+            <label for="person">Name:</label>
+            <p id="person"><%= ticket.person %></p>
+        </div>
+
+        <div class="ticket-detail-item">
+            <label for="issue_choice">Issue:</label>
+            <p id="issue_choice"><%= ticket.issue_choice %></p>
+        </div>
+
+        <div class="ticket-detail-item">
+            <label for="issue_explain">Issue Explanation:</label>
+            <p id="issue_explain"><%= ticket.issue_explain %></p>
+        </div>
+
+        <div class="ticket-detail-item">
+            <label for="agent">Assigned Agent:</label>
+            <p id="agent"><%= ticket.agent %></p>
+        </div>
+
+        <div class="ticket-detail-item">
+            <label for="status">Status:</label>
+            <p id="status"><%= ticket.status %></p>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <label for="file">Attached File:</label>
+            <% if (ticket.file_path) { %>
+                <img src="<%= ticket.file_path %>" alt="Attached image" class="center-image" style="max-width: 100%;">
+                <br>
+                <a href="<%= ticket.file_path %>" target="_blank">View Full File</a>
+            <% } else { %>
+                <p>No file attached</p>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="comments-section" style="flex: 1; border-left: 1px solid #ccc; padding-left: 20px;">
+        <h2>Comments</h2>
+        <ul>
+            <% comments.forEach(comment => { %>
+                <li>
+                    <strong><%= comment.comment_author %>:</strong> <%= comment.comment_text %> 
+                    <br>
+                    <small><%= new Date(comment.comment_time).toLocaleString() %></small>
+                </li>
+            <% }) %>
+        </ul>
+
+        <form action="/addcomment" method="POST" style="margin-top: 20px;">
+            <input type="hidden" name="ticket_id" value="<%= ticket.ticket_id %>">
+            <input type="hidden" name="comment_author" value="<%= oidc.user.email %>">
+            
+            <label for="comment_text">Comment:</label>
+            <textarea id="comment_text" name="comment_text" rows="5" maxlength="1000" required style="width: 100%;" oninput="updateCommentCounter()"></textarea>
+            
+            <p>Characters left: <span id="comment_counter">1000</span></p>
+            
+            <input type="submit" value="Add Comment" style="margin-top: 10px;">
+        </form>
+    </div>
+
+</div>
+
+<div class="back-link" style="margin-top: 20px;">
+    <a href="/tickets">Back to Ticket List</a>
+</div>
+
+<script>
+    function updateCommentCounter() {
+        const textarea = document.getElementById('comment_text');
+        const counter = document.getElementById('comment_counter');
+        const maxLength = textarea.getAttribute('maxlength');
+        const currentLength = textarea.value.length;
+
+        counter.textContent = maxLength - currentLength;
+    }
+</script>
+
+<%- include("./../partials/footer.ejs") %>

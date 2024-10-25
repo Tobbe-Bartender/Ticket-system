@@ -1,0 +1,12 @@
+<%- include("./../partials/header.ejs") %>
+
+<h1>Login</h1>
+    
+    <% if (!req.oidc.isAuthenticated()) { %>
+        <a href="/login">Login with Auth0</a>
+    <% } else { %>
+        <p>Welcome, <%= req.oidc.user.name %>!</p>
+        <a href="/logout">Logout</a>
+    <% } %>
+
+<%- include("./../partials/footer.ejs") %>

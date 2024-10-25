@@ -1,0 +1,64 @@
+<%- include("./../partials/header.ejs") %>
+
+<h1>Change Ticket</h1>
+
+<form method="post" action="/changeticket">
+    <input type="hidden" name="t_ticket_id" value="<%= one.ticket_id %>">
+
+    <label for="namn">Name</label>
+    <input type="text" id="namn" name="t_namn" value="<%= one.person %>" readonly>
+
+    <label for="t_issue_explain">Explain the Issue</label>
+    <textarea id="t_issue_explain" name="t_issue_explain" rows="10" maxlength="1000" required><%= one.issue_explain %></textarea>
+    <p id="charCount">1000 characters remaining</p>
+
+    <% if (oidc.user['http://localhost:1337/roles'].includes('Agent')) { %>
+        <label for="t_issue_choice">Issue</label>
+        <select name="t_issue_choice" id="t_issue_choice" required>
+            <% issueCategories.forEach(category => { %>
+                <option value="<%= category.name %>" 
+                    <% if (one.issue_choice == category.name) { %>selected<% } %>>
+                    <%= category.name %>
+                </option>
+            <% }) %>
+        </select>
+
+        <label for="t_status">Status</label>
+        <select name="t_status" id="t_status" required>
+            <option value="Created" <% if (one.status == 'Created') { %>selected<% } %>>Created</option>
+            <option value="In Progress" <% if (one.status == 'In Progress') { %>selected<% } %>>In Progress</option>
+            <option value="Resolved" <% if (one.status == 'Resolved') { %>selected<% } %>>Resolved</option>
+            <option value="Closed" <% if (one.status == 'Closed') { %>selected<% } %>>Closed</option>
+        </select>
+
+        <label for="t_agent">Agent</label>
+        <select name="t_agent" id="t_agent" required>
+            <option value="Agent Erik" <% if (one.agent == 'Agent Erik') { %>selected<% } %>>Agent Erik</option>
+            <option value="Agent Karl" <% if (one.agent == 'Agent Karl') { %>selected<% } %>>Agent Karl</option>
+            <option value="Agent Ivan" <% if (one.agent == 'Agent Ivan') { %>selected<% } %>>Agent Ivan</option>
+            <option value="Agent Borg" <% if (one.agent == 'Agent Borg') { %>selected<% } %>>Agent Borg</option>
+        </select>
+    <% } else { %>
+        <input type="hidden" name="t_issue_choice" value="<%= one.issue_choice %>">
+        <input type="hidden" name="t_status" value="<%= one.status %>">
+        <input type="hidden" name="t_agent" value="<%= one.agent %>">
+    <% } %>
+
+    <input type="submit" value="Submit">
+</form>
+
+<script>
+    const issueExplain = document.getElementById('t_issue_explain');
+    const charCount = document.getElementById('charCount');
+
+    function updateCharCount() {
+        const remaining = 1000 - issueExplain.value.length;
+        charCount.textContent = `${remaining} characters remaining`;
+    }
+
+    issueExplain.addEventListener('input', updateCharCount);
+
+    window.addEventListener('DOMContentLoaded', updateCharCount);
+</script>
+
+<%- include("./../partials/footer.ejs") %>

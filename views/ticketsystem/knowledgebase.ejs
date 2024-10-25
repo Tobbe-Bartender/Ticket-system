@@ -1,0 +1,46 @@
+<%- include("./../partials/header.ejs") %>
+
+<h1>Knowledge Base</h1>
+
+<form action="/knowledgebase/add" method="POST" style="margin-top: 20px;">
+    <label for="issue_type">Issue Type:</label>
+    <input type="text" id="issue_type" name="issue_type" required style="width: 100%;">
+
+    <label for="solution">Solution:</label>
+    <textarea id="solution" name="solution" rows="5" maxlength="1000" required style="width: 100%;"></textarea>
+    <p id="charCount">1000 characters remaining</p>
+
+    <input type="submit" value="Add to Knowledge Base" style="margin-top: 10px;">
+</form>
+
+<h2>Current Entries</h2>
+<ul class="knowledge-list">
+    <% knowledgeEntries.forEach(entry => { %>
+        <li>
+            <strong><%= entry.issue_type %>:</strong>
+            <p><%= entry.solution %></p>
+            <form action="/knowledgebase/delete" method="POST" style="display: inline;">
+                <input type="hidden" name="entry_id" value="<%= entry.id %>">
+                <button type="submit" style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
+                    Delete
+                </button>
+            </form>
+        </li>
+    <% }) %>
+</ul>
+
+<div class="back-link">
+    <a href="/tickets">Back to Tickets</a>
+</div>
+
+<script>
+    const issueExplain = document.getElementById('solution');
+    const charCount = document.getElementById('charCount');
+
+    issueExplain.addEventListener('input', function () {
+        const remaining = 1000 - issueExplain.value.length;
+        charCount.textContent = `${remaining} characters remaining`;
+    });
+</script>
+
+<%- include("./../partials/footer.ejs") %>
