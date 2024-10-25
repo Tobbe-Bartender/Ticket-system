@@ -9,14 +9,14 @@ To use the database created you can use MariaDB
 
 Follow the guide and configure the ticket.json file according to your user. https://mariadb.com/get-started-with-mariadb/:
 
-in this.json you will have to make the necceary changes to fit you MairaDB user:
+in config/db/this.json you will have to make the necceary changes to fit you MairaDB user:
 
 - host
 - user
 - password
 
 # Email
-In ticket.ejs you have to configure the settings for the email functions to work:
+In src/ticket.ejs you have to configure the settings for the email functions to work:
 
 - service mail
 - user
