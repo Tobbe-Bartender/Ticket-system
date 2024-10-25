@@ -5,16 +5,16 @@ const config = require("./../config/db/this.json");
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: '',
     auth: {
-        user: 'erik.isaksson1337@gmail.com',
-        pass: 'qizm jvwh crwa izpd'
+        user: '',
+        pass: 'q'
     }
 });
 
 async function sendEmail(to, subject, text) {
     let mailOptions = {
-        from: 'erik.isaksson1337@gmail.com',
+        from: '',
         to: to,
         subject: subject,
         text: text
