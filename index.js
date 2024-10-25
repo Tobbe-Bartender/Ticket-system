@@ -28,10 +28,10 @@ app.use(session({
 const config = {
     authRequired: false,
     auth0Logout: true,
-    secret: 'dXEDl7H4SMiDP5dPoRll0do1X0w1ka8SHxzGthjMv-ga4ef-PWYYrP92-qEsnBNM',
+    secret: '',
     baseURL: 'http://localhost:1337',
-    clientID: 'K9j5LXKUY9cHHZF7qbsFhMsGusCRSJZ0',
-    issuerBaseURL: 'https://dev-rll0oenuny1bd80e.us.auth0.com'
+    clientID: '',
+    issuerBaseURL: ''
 };
 app.use(auth(config));
 
